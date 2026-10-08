@@ -1,0 +1,142 @@
+(node:12072) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+Lab03_Product - Flask + XAMPP MySQL + BTH2 JWT
+
+→ 01 - Thieu JWT GET - 401
+  GET http://127.0.0.1:5002/products [401 UNAUTHORIZED, 298B, 20ms]
+  √  HTTP 401
+  √  JWT required
+
+→ 02 - Thieu JWT GET - 401
+  GET http://127.0.0.1:5002/products/1 [401 UNAUTHORIZED, 298B, 4ms]
+  √  HTTP 401
+  √  JWT required
+
+→ 03 - Thieu JWT POST - 401
+  POST http://127.0.0.1:5002/products [401 UNAUTHORIZED, 298B, 3ms]
+  √  HTTP 401
+  √  JWT required
+
+→ 04 - Thieu JWT PUT - 401
+  PUT http://127.0.0.1:5002/products/1 [401 UNAUTHORIZED, 298B, 3ms]
+  √  HTTP 401
+  √  JWT required
+
+→ 05 - Thieu JWT DELETE - 401
+  DELETE http://127.0.0.1:5002/products/1 [401 UNAUTHORIZED, 298B, 3ms]
+  √  HTTP 401
+  √  JWT required
+
+→ 06 - Dang nhap BTH2 - Base64
+  POST http://127.0.0.1:5001/ [200 OK, 463B, 123ms]
+  √  HTTP 200
+  √  JWT received
+
+→ 07 - Danh sach san pham
+  GET http://127.0.0.1:5002/products [200 OK, 192B, 88ms]
+  √  HTTP 200
+  √  Array response
+
+→ 08 - Tao san pham
+  POST http://127.0.0.1:5002/products [201 CREATED, 419B, 66ms]
+  √  HTTP 201
+  √  ID created
+  √  Exact DECIMAL
+  √  Location
+  √  Timestamps
+
+→ 09 - Chi tiet san pham
+  GET http://127.0.0.1:5002/products/1 [200 OK, 391B, 37ms]
+  √  HTTP 200
+  √  Correct product
+
+→ 10 - Cap nhat san pham
+  PUT http://127.0.0.1:5002/products/1 [200 OK, 395B, 55ms]
+  √  HTTP 200
+  √  Updated name
+  √  Updated price
+  √  Updated stock
+  √  Creation preserved
+
+→ 11 - PUT cung du lieu van thanh cong
+  PUT http://127.0.0.1:5002/products/1 [200 OK, 395B, 50ms]
+  √  HTTP 200
+
+→ 12 - Gia am
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 306B, 20ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 13 - Gia vuot DECIMAL
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 306B, 29ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 14 - Gia qua 2 so le
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 306B, 20ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 15 - So luong am
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 295B, 19ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 16 - So luong boolean
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 295B, 21ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 17 - Ten rong
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 280B, 18ms]
+  √  HTTP 400
+  √  Invalid input
+
+→ 18 - Khong cho client gan ID
+  POST http://127.0.0.1:5002/products [400 BAD REQUEST, 298B, 17ms]
+  √  HTTP 400
+
+→ 19 - Token sai chu ky
+  GET http://127.0.0.1:5002/products [401 UNAUTHORIZED, 305B, 5ms]
+  √  HTTP 401
+  √  Token rejected
+
+→ 20 - Xoa san pham
+  DELETE http://127.0.0.1:5002/products/1 [204 NO CONTENT, 186B, 28ms]
+  √  HTTP 204
+  √  Empty body
+
+→ 21 - GET san pham da xoa
+  GET http://127.0.0.1:5002/products/1 [404 NOT FOUND, 227B, 36ms]
+  √  HTTP 404
+  √  Not found
+
+→ 22 - PUT san pham da xoa
+  PUT http://127.0.0.1:5002/products/1 [404 NOT FOUND, 227B, 36ms]
+  √  HTTP 404
+
+→ 23 - DELETE san pham da xoa
+  DELETE http://127.0.0.1:5002/products/1 [404 NOT FOUND, 227B, 61ms]
+  √  HTTP 404
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                23 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                23 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 2 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                48 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 2.5s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 2.3kB (approx)                            │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 33ms [min: 3ms, max: 123ms, s.d.: 29ms] │
+└────────────────────────────────────────────────────────────────┘

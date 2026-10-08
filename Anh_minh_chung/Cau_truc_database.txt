@@ -1,0 +1,12 @@
+xampp_database_version
+10.4.32-MariaDB
+Field	Type	Null	Key	Default	Extra
+id	int(11)	NO	PRI	NULL	auto_increment
+name	varchar(255)	NO		NULL
+description	text	NO		NULL
+price	decimal(10,2)	NO		NULL
+quantity	int(11)	NO		NULL
+created_at	timestamp	NO		current_timestamp()
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+TABLE_NAME	ENGINE
+products	InnoDB

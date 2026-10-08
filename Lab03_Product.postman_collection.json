@@ -1,0 +1,802 @@
+{
+  "info": {
+    "name": "Lab03_Product - Flask + XAMPP MySQL + BTH2 JWT",
+    "description": "Chạy BTH2 :5001 và BTH3 :5002; MySQL XAMPP :3306. Chạy theo thứ tự. POST/PUT đủ name, description, price, quantity. price trả chuỗi giữ chính xác 2 số lẻ. Collection chỉ xóa sản phẩm do nó tạo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "01 - Thieu JWT GET - 401",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"JWT required\",()=>pm.expect(pm.response.json().error).to.eql(\"MISSING_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "02 - Thieu JWT GET - 401",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/1",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"JWT required\",()=>pm.expect(pm.response.json().error).to.eql(\"MISSING_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "03 - Thieu JWT POST - 401",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"JWT required\",()=>pm.expect(pm.response.json().error).to.eql(\"MISSING_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "04 - Thieu JWT PUT - 401",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/1",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"JWT required\",()=>pm.expect(pm.response.json().error).to.eql(\"MISSING_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "05 - Thieu JWT DELETE - 401",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/products/1",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"JWT required\",()=>pm.expect(pm.response.json().error).to.eql(\"MISSING_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "06 - Dang nhap BTH2 - Base64",
+      "request": {
+        "method": "POST",
+        "url": "{{authUrl}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userName\": \"{{userName}}\",\n  \"password\": \"{{passwordBase64}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.variables.set(\"passwordBase64\", require(\"btoa\")(pm.collectionVariables.get(\"password\")));",
+              "})();"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const result=pm.response.json();",
+              "pm.test(\"JWT received\",()=>pm.expect(result.access_token).to.be.a(\"string\"));",
+              "pm.collectionVariables.set(\"token\",result.access_token);",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "07 - Danh sach san pham",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "pm.test(\"Array response\",()=>pm.expect(pm.response.json()).to.be.an(\"array\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "08 - Tao san pham",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+              "const result=pm.response.json();",
+              "pm.test(\"ID created\",()=>pm.expect(result.id).to.be.above(0));",
+              "pm.test(\"Exact DECIMAL\",()=>pm.expect(result.price).to.eql(\"1250000.50\"));",
+              "pm.test(\"Location\",()=>pm.expect(pm.response.headers.get(\"Location\")).to.eql(\"/products/\"+result.id));",
+              "pm.test(\"Timestamps\",()=>{pm.expect(result.created_at).to.be.a(\"string\");pm.expect(result.updated_at).to.be.a(\"string\");});",
+              "pm.collectionVariables.set(\"productId\",result.id);",
+              "pm.collectionVariables.set(\"createdAt\",result.created_at);",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "09 - Chi tiet san pham",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "pm.test(\"Correct product\",()=>pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"productId\"))));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "10 - Cap nhat san pham",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ đã cập nhật\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1199000.00\",\n  \"quantity\": 7\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const result=pm.response.json();",
+              "pm.test(\"Updated name\",()=>pm.expect(result.name).to.eql(\"Bàn phím cơ đã cập nhật\"));",
+              "pm.test(\"Updated price\",()=>pm.expect(result.price).to.eql(\"1199000.00\"));",
+              "pm.test(\"Updated stock\",()=>pm.expect(result.quantity).to.eql(7));",
+              "pm.test(\"Creation preserved\",()=>pm.expect(result.created_at).to.eql(pm.collectionVariables.get(\"createdAt\")));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "11 - PUT cung du lieu van thanh cong",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ đã cập nhật\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1199000.00\",\n  \"quantity\": 7\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "12 - Gia am",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"-1\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "13 - Gia vuot DECIMAL",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"100000000.00\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "14 - Gia qua 2 so le",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1.001\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "15 - So luong am",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": -1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "16 - So luong boolean",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "17 - Ten rong",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"Invalid input\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_INPUT\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "18 - Khong cho client gan ID",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": 10,\n  \"id\": 999\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "19 - Token sai chu ky",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{badToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "const parts=pm.collectionVariables.get(\"token\").split(\".\");",
+              "parts[2]=(parts[2][0]===\"A\"?\"B\":\"A\")+parts[2].slice(1);",
+              "pm.variables.set(\"badToken\",parts.join(\".\"));",
+              "})();"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"Token rejected\",()=>pm.expect(pm.response.json().error).to.eql(\"INVALID_TOKEN\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "20 - Xoa san pham",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));",
+              "pm.test(\"Empty body\",()=>pm.expect(pm.response.text()).to.eql(\"\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "21 - GET san pham da xoa",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "pm.test(\"Not found\",()=>pm.expect(pm.response.json().error).to.eql(\"PRODUCT_NOT_FOUND\"));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "22 - PUT san pham da xoa",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bàn phím cơ thực hành\",\n  \"description\": \"Sản phẩm kiểm thử BTH3\",\n  \"price\": \"1250000.50\",\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "23 - DELETE san pham da xoa",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "(() => {",
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "})();"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5002"
+    },
+    {
+      "key": "authUrl",
+      "value": "http://127.0.0.1:5001/"
+    },
+    {
+      "key": "userName",
+      "value": "phat"
+    },
+    {
+      "key": "password",
+      "value": "Phat@123"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    }
+  ]
+}
