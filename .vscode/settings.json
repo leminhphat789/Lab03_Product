@@ -1,5 +1,0 @@
-{
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
-  "python.testing.unittestEnabled": true,
-  "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "test_*.py"]
-}
